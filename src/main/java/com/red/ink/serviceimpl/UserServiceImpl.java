@@ -396,7 +396,7 @@ public class UserServiceImpl implements UserService {
 			Optional<User> loggedInUser = userRepository.findByUsername(forgetPassword.getUsername());
 			if (forgetPassword.getUsername() != null && forgetPassword.getUsername() != "") {
 				if (forgetPassword.getUsername().equals(loggedInUser.get().getUsername())) {
-					if (loggedInUser != null) {
+					if (forgetPassword.getEmail().equals(loggedInUser.get().getEmail())) {
 						if (loggedInUser.isPresent()) {
 							String password = randomPasswordGenerator.generateRandomString();
 							if (forgetPassword.getEmail() != null && forgetPassword.getEmail() != "") {
@@ -432,7 +432,12 @@ public class UserServiceImpl implements UserService {
 							return jsonConstactor.responseCreation(false, "Failed", "User can't be null!!!", null,
 									null);
 						}
-					} 
+					}  else {
+						return jsonConstactor.responseCreation(false, "Failed", "emaild id can't be Matched!!!", null, null);
+					}
+					
+					
+					
 				} else {
 					return jsonConstactor.responseCreation(false, "Failed", "Username can't be Matched!!!", null, null);
 				}
