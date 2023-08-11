@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -133,7 +134,7 @@ public class EventUploadServiceImpl implements EventUploadService{
 								image = ImageIO.read(bais);
 								bais.close();
 
-								String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+ "." + "png";
+								String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+UUID.randomUUID().toString() + "." + "png";
 								String filePath1 = Constants.EVENTUPLOADIMG + fileName11;
 								File outputFile = new File(filePath1);
 								ImageIO.write(image, "png", outputFile);
@@ -332,7 +333,7 @@ public class EventUploadServiceImpl implements EventUploadService{
 								image = ImageIO.read(bais);
 								bais.close();
 
-								String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+ "." + "png";
+								String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+UUID.randomUUID().toString() + "." + "png";
 								String filePath1 = Constants.EVENTUPLOADIMG + fileName11;
 								File outputFile = new File(filePath1);
 								ImageIO.write(image, "png", outputFile);
