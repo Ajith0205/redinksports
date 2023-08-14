@@ -156,6 +156,12 @@ public class UserController {
 		return userService.createMobilePasswordOTP(changePassword);
 	}
 	
+	@PostMapping("saveuser")
+	public ResponseEntity<Object>createUser(@RequestHeader("Authorization") String token,@RequestBody User user){
+		return userService.createUser(token,user);
+		
+	}
+	
 
 	
 }

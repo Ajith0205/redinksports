@@ -1113,7 +1113,287 @@ if (changePassword != null) {
 		return null;
 	}
 	
-	
+	@Override
+	public ResponseEntity<Object> createUser(String token, User user) {
+		String jwtToken = token.replaceFirst("Bearer", "");
+			DecodedJWT jwt = JWT.decode(jwtToken.trim());
+			Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
+			if(loggedInUser.isPresent()) {
+
+
+				Optional<User> users = userRepository.findByUsername(user.getUsername());
+
+				if ((users.isEmpty() && (!user.getUsername().isEmpty()))) {
+					Long roleId = (long) 0;
+					if (user.getSelectRole().equals("Trainer")) {
+						roleId = (long) 2;
+					} else if (user.getSelectRole().equals("Player")) {
+						roleId = (long) 3;
+					}
+
+					if (roleId != 0) {
+
+						Role role = roleService.getById(roleId);
+						user.setRole(role);
+
+						User user1 = new User();
+						user1.setPermissions("ADD,EDIT,DELETE,LIST");
+						user1.setName(user.getName());
+						user1.setAadharNo(user.getAadharNo());
+						user1.setAddress(user.getAddress());
+						user1.setDateofbirth(user.getDateofbirth());
+						user1.setEmail(user.getEmail());
+						user1.setFatherName(user.getFatherName());
+						user1.setGender(user.getGender());
+						user1.setPanNo(user.getPanNo());
+						String password = randomPasswordGenerator.generateRandomString();
+						
+						user1.setPassword(bcryptPasswordEncoder.encode(password));
+						user1.setPhysicalStatus(user.getPhysicalStatus());
+						user1.setPlaceofBirth(user.getPlaceofBirth());
+						user1.setProfile(user.getProfile());
+						user1.setRole(user.getRole());
+						user1.setRoleId(roleId);
+						user1.setSelectgame(user.getSelectgame());
+						user1.setSelectRole(user.getSelectRole());
+						user1.setStatus(true);
+						user1.setUploadAadhar(user.getUploadAadhar());
+						user1.setUploadPAN(user.getUploadPAN());
+						user1.setWhatsappNo(user.getWhatsappNo());
+						user1.setUsername(user.getUsername());
+
+						// profile Upload
+						if (user.getProfile() != null && user.getProfile() != "") {
+							String imageUser = user.getProfile();
+
+							if (user.getProfile() != null && user.getProfile() != "") {
+								String fileName = user.getProfile().substring(user.getProfile().lastIndexOf("/"));
+								String filePath = Constants.USERPROFILEIMG + fileName;
+							File dest = new File(filePath);
+								//File dest = new File("/var/www/html/userProfileImages/A.png");
+								
+								dest.delete();
+//								System.out.println("status"+dest.exists());
+
+							}
+							String path = null;
+							boolean base64 = false;
+							// photo path can send data start that only for Base64 datas
+							if (user.getProfile().startsWith("data:")) {
+								String[] arrOfStr = user.getProfile().split(",");
+								String[] arrOfStr1 = arrOfStr[0].split(";");
+								if (arrOfStr1[1].equalsIgnoreCase("base64")) {
+									base64 = true;
+								} else {
+									base64 = false;
+								}
+							}
+							if (base64) {
+
+								String[] path1 = user.getProfile().split("/");
+								String fileName = path1[path1.length - 1];
+								Path myPath = Paths.get(Constants.USERPROFILEIMG + "/" + fileName);
+								try {
+									Files.delete(myPath);
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+
+								String[] parts = user.getProfile().split(",");
+								String imageString = parts[1];
+								try {
+									File dir = new File(Constants.USERPROFILEIMG);
+									if (!dir.exists()) {
+										dir.mkdirs();
+									}
+									BufferedImage image = null;
+									Decoder decoder = Base64.getDecoder();
+									byte[] resultImage = decoder.decode(imageString);
+									ByteArrayInputStream bais = new ByteArrayInputStream(resultImage);
+									image = ImageIO.read(bais);
+									bais.close();
+
+									String fileName1 = user1.getUsername() + "Profile"+"." + "png";
+									String filePath = Constants.USERPROFILEIMG + fileName1;
+									File outputFile = new File(filePath);
+									ImageIO.write(image, "png", outputFile);
+									path = Constants.USERPROFILEIMG_ACCESSPATH + fileName1;
+									user1.setProfile(path);
+
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+
+						}
+
+						// aadharUpload
+
+						if (user.getUploadAadhar() != null && user.getUploadAadhar() != "") {
+							String imageUser = user.getUploadAadhar();
+
+							if (user.getUploadAadhar() != null && user.getUploadAadhar() != "") {
+								String fileName = user.getUploadAadhar().substring(user.getUploadAadhar().lastIndexOf("/"));
+								String filePath = Constants.USERAADHARIMG + fileName;
+								File dest = new File(filePath);
+								dest.delete();
+
+							}
+							String path = null;
+							boolean base64 = false;
+							if (user.getUploadAadhar() != null && user.getUploadAadhar() != "") {
+								// photo path can send data start that only for Base64 datas
+								if (user.getUploadAadhar().startsWith("data:")) {
+									String[] arrOfStr = user.getUploadAadhar().split(",");
+									String[] arrOfStr1 = arrOfStr[0].split(";");
+									if (arrOfStr1[1].equalsIgnoreCase("base64")) {
+										base64 = true;
+									} else {
+										base64 = false;
+									}
+
+								}
+								if (base64) {
+									if (user.getUploadAadhar() != null && user.getUploadAadhar() != "") {
+										String[] path1 = user.getUploadAadhar().split("/");
+										String fileName = path1[path1.length - 1];
+										Path myPath = Paths.get(Constants.USERAADHARIMG + "/" + fileName);
+
+										try {
+											Files.delete(myPath);
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									}
+									String[] parts = user.getUploadAadhar().split(",");
+									String imageString = parts[1];
+									try {
+										File dir = new File(Constants.USERAADHARIMG);
+										if (!dir.exists()) {
+											dir.mkdirs();
+										}
+										BufferedImage image = null;
+										Decoder decoder = Base64.getDecoder();
+										byte[] resultImage = decoder.decode(imageString);
+										ByteArrayInputStream bais = new ByteArrayInputStream(resultImage);
+										image = ImageIO.read(bais);
+										bais.close();
+
+										String fileName =user1.getUsername() +"Aadhar"+"." + "png";
+										String filePath = Constants.USERAADHARIMG + fileName;
+										File outputFile = new File(filePath);
+										ImageIO.write(image, "png", outputFile);
+										path = Constants.USERAADHARIMG_ACCESSPATH + fileName;
+										user1.setUploadAadhar(path);
+
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
+
+						}
+
+						// pan upload
+
+						if (user.getUploadPAN() != null && user.getUploadPAN() != "") {
+							String imageUser = user.getUploadPAN();
+
+							if (user.getUploadPAN() != null && user.getUploadPAN() != "") {
+								String fileName = user.getUploadPAN().substring(user.getUploadPAN().lastIndexOf("/"));
+								String filePath = Constants.USERPANIMG + fileName;
+								File dest = new File(filePath);
+								dest.delete();
+							}
+							String path = null;
+							boolean base64 = false;
+							if (user.getUploadPAN() != null && user.getUploadPAN() != "") {
+
+								// photo path can send data start that only for Base64 datas
+								if (user.getUploadPAN().startsWith("data:")) {
+									String[] arrOfStr = user.getUploadPAN().split(",");
+									String[] arrOfStr1 = arrOfStr[0].split(";");
+									if (arrOfStr1[1].equalsIgnoreCase("base64")) {
+										base64 = true;
+									} else {
+										base64 = false;
+									}
+
+								}
+								if (base64) {
+									if (user.getUploadPAN() != null && user.getUploadPAN() != "") {
+										String[] path1 = user.getUploadPAN().split("/");
+										String fileName = path1[path1.length - 1];
+										Path myPath = Paths.get(Constants.USERPANIMG + "/" + fileName);
+
+										try {
+											Files.delete(myPath);
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+									}
+									String[] parts = user.getUploadPAN().split(",");
+									String imageString = parts[1];
+									try {
+										File dir = new File(Constants.USERPANIMG);
+										if (!dir.exists()) {
+											dir.mkdirs();
+										}
+										BufferedImage image = null;
+										Decoder decoder = Base64.getDecoder();
+										byte[] resultImage = decoder.decode(imageString);
+										ByteArrayInputStream bais = new ByteArrayInputStream(resultImage);
+										image = ImageIO.read(bais);
+										bais.close();
+										String fileName = user1.getUsername() + "PAN"+"." + "png";
+										String filePath = Constants.USERPANIMG + fileName;
+										File outputFile = new File(filePath);
+										ImageIO.write(image, "png", outputFile);
+										path = Constants.USERPANIMG_ACCESSPATH + fileName;
+										user1.setUploadPAN(path);
+
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							}
+
+						}
+
+						User user2 = userRepository.save(user1);
+						
+						// emaild Id Validation
+						if (user1.getEmail() !=null) {
+							String emailLoginContent = "Website: " + "<a href = " + Constants.URL
+									+ ">www.redinksports.com</a><br/>";
+							String[] receivers = new String[] { user1.getEmail() };
+							SendMail.sendMail(receivers, "Hi " + user1.getName() + ","
+									+ "<br /><br />"
+									+ "Your REDINK  Your Account Create Successfully. Please find your login details below."
+									+ "<br />" + emailLoginContent + "Username: "
+									+ user1.getUsername() + "<br />" 
+									+ "Password: " + password
+									+ "<br /><br />" + "Thanks & Regards," + "<br />" + "REDINK Sports ","Team", null);
+						} 
+
+						return jsonConstactor.responseCreation(true, "User Saved Sucess", null, null,null);
+					}
+
+				}
+
+				return jsonConstactor.responseCreation(false, "UserName is Already Exists", null, null, null);
+			
+			}
+			
+			return jsonConstactor.responseCreation(false, "User Token Is not valid",null, null,
+					null);	
+	}
+
 
 	
 }
