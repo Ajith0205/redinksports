@@ -63,6 +63,7 @@ public ResponseEntity<Object> otpSend(PasswordResetRequestDto otpRequest);
 public ResponseEntity<Object> createMobilePasswordOTP(ChangePassword changePassword);
 
 public ResponseEntity<Object> createUser(String token, User user);
+public ResponseEntity<Object> statusChange(String token, Long id, boolean status);
 
 //public ResponseEntity<Object> findUserById(Long id);
 

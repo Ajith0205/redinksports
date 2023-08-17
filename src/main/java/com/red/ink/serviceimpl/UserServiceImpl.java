@@ -1394,6 +1394,32 @@ if (changePassword != null) {
 					null);	
 	}
 
+	@Override
+	public ResponseEntity<Object> statusChange(String token, Long id,boolean status) {
+		String jwtToken = token.replaceFirst("Bearer", "");
+		DecodedJWT jwt = JWT.decode(jwtToken.trim());
+		Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
+		if(loggedInUser.isPresent()) {
+			String role="ADMIN";
+			if(loggedInUser.get().getRole().getRole().equals(role)) {
+				Optional<User>user=userRepository.findById(id);
+				if(!user.isEmpty()) {
+					if(status == true) {
+						user.get().setStatus(true);
+					}else {
+						user.get().setStatus(false);
+					}
+					
+					userRepository.saveAndFlush(user.get());
+					
+					return jsonConstactor.responseCreation(true, "status change success", null, null);
+				}
+			}
+			return jsonConstactor.responseCreation(false, "canot give Access to this User", null, null, null);
+		}
+		return jsonConstactor.responseCreation(false, "User Token Is not valid",null, null,
+				null);	
+	}
 
 	
 }

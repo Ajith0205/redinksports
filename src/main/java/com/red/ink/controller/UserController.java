@@ -155,13 +155,24 @@ public class UserController {
 	public ResponseEntity<Object> createMobilePasswordOTP(@RequestBody ChangePassword changePassword) {
 		return userService.createMobilePasswordOTP(changePassword);
 	}
-	
+
+	/*
+	 * @Param user  create Restricted Based
+	*/
 	@PostMapping("saveuser")
 	public ResponseEntity<Object>createUser(@RequestHeader("Authorization") String token,@RequestBody User user){
 		return userService.createUser(token,user);
 		
 	}
-	
+
+	/*
+	 * User Login Option enable  and disable
+	*/
+	@GetMapping("statusChange")
+	public ResponseEntity<Object>statusChange(@RequestHeader("Authorization") String token,@RequestParam Long id,@RequestParam boolean status){
+		return userService.statusChange(token,id,status);
+		
+	}
 
 	
 }
