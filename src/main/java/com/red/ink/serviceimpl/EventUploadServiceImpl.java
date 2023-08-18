@@ -257,6 +257,9 @@ public class EventUploadServiceImpl implements EventUploadService{
 		try {
 			DecodedJWT jwt = JWT.decode(jwtToken.trim());
 			Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
+			if(id!=null) {
+				Optional<EventUpload>eventUpload1=eventUploadRepository.findById(id);
+			
 			if (loggedInUser.isPresent()) {
 				if(eventUpload !=null && eventUpload.getId() !=null) {
 					EventUpload eventUpload2=new EventUpload();
@@ -264,96 +267,87 @@ public class EventUploadServiceImpl implements EventUploadService{
 					eventUpload2.setEventDate(eventUpload.getEventDate());
 					eventUpload2.setEventPlace(eventUpload.getEventPlace());
 					eventUpload2.setId(id);
-					eventUpload2.setImage(eventUpload.getImage());
-//					if(eventUpload.getEventDate()!=null) {
-//					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
-//					Date eventDate2 = sdf.parse(eventUpload.getEventDate().toString()); 
-//		               		              
-//		               // eventUpload2.setEventDate(eventDate2);
-//				}
-					
-					//String To Date Convert
-					if(eventUpload.getEventDate()!=null) {
-					
-						
-						String sDate1=eventUpload.getEventDate(); 
-						  Date date1=new SimpleDateFormat("yyyy-MM-dd").parse(sDate1);  
-						//  Date date1=new SimpleDateFormat("dd/MM/yyyy").parse(sDate1);  
-			               		              
-			               // eventUpload2.setEventDate(eventDate2);
-					}
-					
-					
-					
-					if(eventUpload.getImage() !=null&&eventUpload.getImage() !="") {
-						String imageUser = eventUpload.getImage();
+				
+					if(eventUpload1.get().getImage().equals(eventUpload.getImage())) {
+						eventUpload2.setImage(eventUpload.getImage());
+					}else {
+						if(eventUpload.getImage() !=null&&eventUpload.getImage() !="") {
+							String imageUser = eventUpload.getImage();
 
-					//	if (user.getProfile() != null && user.getProfile() != "") {
-							String fileName = eventUpload.getImage().substring(eventUpload.getImage().lastIndexOf("/"));
-							String filePath = Constants.USERPROFILEIMG + fileName;
-							File dest = new File(filePath);
-							dest.delete();
+						//	if (user.getProfile() != null && user.getProfile() != "") {
+//								String fileName = eventUpload.getImage().substring(eventUpload.getImage().lastIndexOf("/"));
+						     	String fileName=eventUpload1.get().getImage();
+								String filePath = Constants.USERPROFILEIMG + fileName;
+								File dest = new File(filePath);
+								dest.delete();
 
-					//	}
-						String path = null;
-						boolean base64 = false;
-						// photo path can send data start that only for Base64 datas
-						if (eventUpload.getImage().startsWith("data:")) {
-							String[] arrOfStr = eventUpload.getImage().split(",");
-							String[] arrOfStr1 = arrOfStr[0].split(";");
-							if (arrOfStr1[1].equalsIgnoreCase("base64")) {
-								base64 = true;
-							} else {
-								base64 = false;
-							}
-						}
-						if (base64) {
-
-							String[] path1 = eventUpload.getImage().split("/");
-							String fileName1 = path1[path1.length - 1];
-							Path myPath = Paths.get(Constants.EVENTUPLOADIMG + "/" + fileName1);
-							try {
-								Files.delete(myPath);
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-							String[] parts = eventUpload.getImage().split(",");
-							String imageString = parts[1];
-							try {
-								File dir = new File(Constants.EVENTUPLOADIMG);
-								if (!dir.exists()) {
-									dir.mkdirs();
+						//	}
+							String path = null;
+							boolean base64 = false;
+							// photo path can send data start that only for Base64 datas
+							if (eventUpload.getImage().startsWith("data:")) {
+								String[] arrOfStr = eventUpload.getImage().split(",");
+								String[] arrOfStr1 = arrOfStr[0].split(";");
+								if (arrOfStr1[1].equalsIgnoreCase("base64")) {
+									base64 = true;
+								} else {
+									base64 = false;
 								}
-								BufferedImage image = null;
-								Decoder decoder = Base64.getDecoder();
-								byte[] resultImage = decoder.decode(imageString);
-								ByteArrayInputStream bais = new ByteArrayInputStream(resultImage);
-								image = ImageIO.read(bais);
-								bais.close();
+							}
+							if (base64) {
 
-								String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+UUID.randomUUID().toString() + "." + "png";
-								String filePath1 = Constants.EVENTUPLOADIMG + fileName11;
-								File outputFile = new File(filePath1);
-								ImageIO.write(image, "png", outputFile);
-								path = Constants.EVENTUPLOADIMG_ACCESSPATH + fileName11;
-								eventUpload2.setImage(path);
-                          //  eventUploadRepository.saveAndFlush(eventUpload2);
-                         
-                            
-							} catch (Exception e) {
-								e.printStackTrace();
+								String[] path1 = eventUpload.getImage().split("/");
+								String fileName1 = path1[path1.length - 1];
+								Path myPath = Paths.get(Constants.EVENTUPLOADIMG + "/" + fileName1);
+								try {
+									Files.delete(myPath);
+								} catch (IOException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+
+								String[] parts = eventUpload.getImage().split(",");
+								String imageString = parts[1];
+								try {
+									File dir = new File(Constants.EVENTUPLOADIMG);
+									if (!dir.exists()) {
+										dir.mkdirs();
+									}
+									BufferedImage image = null;
+									Decoder decoder = Base64.getDecoder();
+									byte[] resultImage = decoder.decode(imageString);
+									ByteArrayInputStream bais = new ByteArrayInputStream(resultImage);
+									image = ImageIO.read(bais);
+									bais.close();
+
+									String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+ "." + "png";
+									String filePath1 = Constants.EVENTUPLOADIMG + fileName11;
+									File outputFile = new File(filePath1);
+									ImageIO.write(image, "png", outputFile);
+									path = Constants.EVENTUPLOADIMG_ACCESSPATH + fileName11;
+									eventUpload2.setImage(path);
+	                          //  eventUploadRepository.saveAndFlush(eventUpload2);
+	                         
+	                            
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 							}
 						}
+						
 					}
+					
 					
 					  eventUploadRepository.saveAndFlush(eventUpload2);
 					  dto.setEvent(eventUpload2);
 					  return jsonConstactor.responseCreation(true,"Event Update","Success", dto);
 				}
 				
+				
 			}
+			
+		}
+			
 			return null;
 		}catch(Exception e) {
 			e.printStackTrace();
