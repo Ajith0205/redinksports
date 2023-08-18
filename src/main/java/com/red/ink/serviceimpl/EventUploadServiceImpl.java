@@ -320,7 +320,7 @@ public class EventUploadServiceImpl implements EventUploadService{
 									image = ImageIO.read(bais);
 									bais.close();
 
-									String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+ "." + "png";
+									String fileName11 =eventUpload2.getEventPlace()+eventUpload2.getEventName()+UUID.randomUUID().toString()+ "." + "png";
 									String filePath1 = Constants.EVENTUPLOADIMG + fileName11;
 									File outputFile = new File(filePath1);
 									ImageIO.write(image, "png", outputFile);
