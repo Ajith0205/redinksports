@@ -35,4 +35,6 @@ public interface VideoUploadService {
 
 	ResponseEntity<Object> uploadVideoLists(String token, MultipartFile[] videoFiles, String description, String title);
 
+	ResponseEntity<Object> deleteByVideo(String token, Long id);
+
 }

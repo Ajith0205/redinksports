@@ -18,4 +18,6 @@ public ResponseEntity<Object> eventDelete(String token, Long id);
 
 public ResponseEntity<Object> finById(Long id, String token);
 
+public ResponseEntity<Object> removeEventImage(Long eventId, String token);
+
 }

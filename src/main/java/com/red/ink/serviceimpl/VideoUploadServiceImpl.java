@@ -408,4 +408,36 @@ public class VideoUploadServiceImpl implements VideoUploadService {
 		return null;
 	}
 
+	@Override
+	public ResponseEntity<Object> deleteByVideo(String token, Long id) {
+		String jwtToken = token.replaceFirst("Bearer", "");
+		DecodedJWT jwt = JWT.decode(jwtToken.trim());
+		Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
+		if (loggedInUser.isPresent()) {
+			 Optional<VideoUpload> videoUploadOptional = videoUploadRepository.findById(id);
+			 if(videoUploadOptional.isPresent()) {
+				 
+				 if (videoUploadOptional.get().getFileName() != null && !videoUploadOptional.get().getFileName().isEmpty()) {
+		                String filePath1 = Constants.UPLOADVIDEO + extractFileName(videoUploadOptional.get().getFileName());
+		                File imageFile = new File(filePath1);
+		                if (imageFile.exists()) {
+		                    imageFile.delete();
+		                }
+				 }
+				 
+				 videoUploadRepository.deleteById(videoUploadOptional.get().getId());
+				 
+				 return jsonConstractor.responseCreation(true, "Video Delete Success", null, null); 
+				 
+			 }
+		}
+		
+		return null;
+	}
+	
+	private String extractFileName(String path) {
+	    // Assuming the image path is in the format: "http://localhost/EventUploadImg/filename.png"
+	    return path.substring(path.lastIndexOf('/') + 1);
+	}
+
 }

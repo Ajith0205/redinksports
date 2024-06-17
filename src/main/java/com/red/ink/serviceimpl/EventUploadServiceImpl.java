@@ -393,6 +393,56 @@ public class EventUploadServiceImpl implements EventUploadService{
 		}
 		return null;
 	}
+
+	@Override
+	public ResponseEntity<Object> removeEventImage(Long eventId,String token) {
+		String jwtToken = token.replaceFirst("Bearer", "");
+		DecodedJWT jwt = JWT.decode(jwtToken.trim());
+		try {
+			Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
+			if(loggedInUser.isPresent()) {
+				 Optional<EventUpload> event=eventUploadRepository.findById(eventId);
+				
+			
+		            if(!event.isEmpty()) {
+					     // Delete the image file from the local storage
+				            if (event.get().getImage() != null && !event.get().getImage().isEmpty()) {
+				                String filePath1 = Constants.EVENTUPLOADIMG + extractFileName(event.get().getImage());
+				                File imageFile = new File(filePath1);
+				                if (imageFile.exists()) {
+				                    imageFile.delete();
+				                }
+				                
+				            	// Set the image field to null
+					            event.get().setImage(null);
+				            }
+		            eventUploadRepository.save(event.get());
+				
+			            
+			            return jsonConstactor.responseCreation(true,"Event image Delete","Success", null, null);
+			        } else {
+			            throw new Exception ("Event not found with id " + eventId);
+			        }
+				 }
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return null;
+		
+		
+		
+		
+	}
+	
+
+	
+	private String extractFileName(String path) {
+	    // Assuming the image path is in the format: "http://localhost/EventUploadImg/filename.png"
+	    return path.substring(path.lastIndexOf('/') + 1);
+	}
 	
 
 	
