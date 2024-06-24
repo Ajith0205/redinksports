@@ -27,7 +27,13 @@ public class EventUploadController {
 	
 	 
 	
-	 
+	 /**
+	  * create Event
+	  * 
+	  * @param eventUpload
+	  * @param token
+	  * @return
+	  */
 	 @PostMapping("upload")
 		public ResponseEntity<Object> eventUploadSave(@RequestBody EventUpload eventUpload,
 				@RequestHeader("Authorization") String token) {
@@ -35,13 +41,25 @@ public class EventUploadController {
 		}
 	 
 	 
-	 
+	 /**
+	  * upload List Of events
+	  * 
+	  * @param token
+	  * @return
+	  */
 	 @GetMapping("uploadList")
 	 public ResponseEntity<Object> eventUploadList(
 				@RequestHeader("Authorization") String token) {
 			return eventUploadService.eventLists( token);
 		}
-	 
+	 /**
+	  * update Event
+	  * 
+	  * @param eventUpload
+	  * @param id
+	  * @param token
+	  * @return
+	  */
 	 @PutMapping("update")
 	 public ResponseEntity<Object>updateEvent(@RequestBody EventUpload eventUpload,@RequestParam("id")Long id,
 			 @RequestHeader("Authorization") String token){
@@ -50,13 +68,24 @@ public class EventUploadController {
 		 
 	 }
 	 
+	 /**
+	  * delete event
+	  * @param token
+	  * @param id
+	  * @return
+	  */
 	 @DeleteMapping("eventdelete")
 	 public ResponseEntity<Object>deleteEvent(@RequestHeader("Authorization") String token,@RequestParam("id") Long id){
 		return eventUploadService.eventDelete(token,id);
 		 
 	 }
 	 
-	 
+	 /**
+	  * find By event 
+	  * @param id
+	  * @param token
+	  * @return
+	  */
 	 
 	 @GetMapping("findeventid")
 	 

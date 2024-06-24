@@ -23,15 +23,17 @@ public class TwilioOTPService {
 	    private TwilioConfig twilioConfig;
 
 	    Map<String, String> otpMap = new HashMap<>();
-	    
-//	    #Otp Send Mobile No
-//	    twilio.account_sid=ACbdeb906b7051ce09e6b63e640512aa40
-//	   twilio.auth_token=8bc8e38367a226bdc139b9f44be9fbee
-//	   twilio.trial_number=+16672708451
-//	    
+	    	    
 	    private final String ACCOUNT_SID = "ACbdeb906b7051ce09e6b63e640512aa40";
 	    private final String AUTH_TOKEN = "8bc8e38367a226bdc139b9f44be9fbee";
 	    private final String TRIAL_PHONE_NUMBER = "+16672708451";
+	    
+	    /**
+	     * Twilio Based Mobole Otp send 
+	     * 
+	     * @param passwordResetRequestDto
+	     * @return
+	     */
 
 	   public PasswordResetResponseDto sendOTPForPasswordReset(PasswordResetRequestDto passwordResetRequestDto) {
 	    

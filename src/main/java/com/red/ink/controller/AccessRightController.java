@@ -29,11 +29,25 @@ public class AccessRightController {
 @Autowired
 private	AccessRightService accessRightService;
 
+/**
+ * create Rights Role Based 
+ * 
+ * @param acsssRightsDto
+ * @param token
+ * @return
+ */
 @PostMapping("save")
 public ResponseEntity<Object> saveAccessRights(@RequestBody AcsssRightsDto acsssRightsDto, 
 		@RequestHeader("Authorization") String token) {
 	return accessRightService.createAccessRights(acsssRightsDto, token);
 }
+/**
+ * find  rights Role Based 
+ * 
+ * @param roleId
+ * @param token
+ * @return
+ */
 @GetMapping("findRightsByRole")
 public ResponseEntity<Object> findRightsByRole( @RequestParam ("roleId") Long roleId, 
 		@RequestHeader("Authorization") String token) {

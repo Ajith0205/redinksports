@@ -54,12 +54,16 @@ public class UserController {
 	@PostMapping("login")
 	public void validateUser(@RequestBody LoginDto user) {
 	}
-	/*
-	 * Forgot Password  send Otp For Mail
-	 * @ Inputs email,username
-	 * 
-	*/
 	
+	
+	/**
+	 * Forgot Password  send Otp For Mail
+	 * 
+	 * Inputs email,username
+	 * 
+	 * @param forgotPassword
+	 * @return
+	 */
 	
 	@PostMapping("forgotpasswordOTP")
 	public ResponseEntity<Object> forgotPasswordOTP(@RequestBody ForgotPassword forgotPassword) {
@@ -68,36 +72,53 @@ public class UserController {
 	
 	
 
-	/*
-	 * Password Change  
-	 * @ Inputs Old Password,New Password ,Conform Password
-	 * 
-	*/
+
+	
+	/**
+	 * Password Change
+	 * Inputs Old Password,New Password ,Conform Password
+	 * @param changePassword
+	 * @param token
+	 * @return
+	 */
 	@PostMapping("changePassword")
 	public ResponseEntity<Object> changePassword(@RequestBody ChangePassword changePassword,
 			@RequestHeader("Authorization") String token) {
 		return userService.changePasswordByUser(changePassword, token);
 	}
 
-	/*
+	
+	/**
 	 * Email Otp Validation for 5 minutes
-	 * 
-	 * 
-	*/
+	 * @param changePassword
+	 * @return
+	 */
 	@PostMapping("checkOtp")
 	public ResponseEntity<Object> createPasswordOTP(@RequestBody ChangePassword changePassword) {
 		return userService.otpCreatePassword(changePassword);
 	}
 	
-	/*
-	 * Password To send Email Directly
+	
+	
+	/**
+	 *  password Send to Email 
 	 * 
-	*/
+	 * @param forgetPassword
+	 * @return
+	 */
 	@PostMapping("forgotpassword")
 	public ResponseEntity<Object> forgotPassword(@RequestBody ForgotPassword forgetPassword) {
 		return userService.forgotPasswordByUser(forgetPassword);
 
 	}
+	
+	/**
+	 * get User Details
+	 * 
+	 * @param id
+	 * @param token
+	 * @return
+	 */
 
 	@GetMapping("userDetails")
 	public ResponseEntity<Object> findUserById(@RequestParam("id") Long id,
@@ -105,6 +126,14 @@ public class UserController {
 		return userService.findUserById(id,token);
 
 	}
+	
+	/**
+	 * delete User
+	 * 
+	 * @param id
+	 * @param token
+	 * @return
+	 */
 
 	@DeleteMapping("deleteUser")
 	public ResponseEntity<Object> deleteUserById(@RequestParam("id") Long id,
@@ -114,6 +143,14 @@ public class UserController {
 
 	
 
+	/**
+	 * 
+	 * save Multiple  user
+	 * 
+	 * @param file
+	 * @param token
+	 * @return
+	 */
 	
 
 	@PostMapping("saveMultipleUsers")
@@ -123,12 +160,25 @@ public class UserController {
 
 	}
 	
+	/**
+	 * Get All Users
+	 * 
+	 * @param token
+	 * @return
+	 */
+	
 	@GetMapping("getAllUsers")
 	public ResponseEntity<Object> getAlluser(@RequestHeader("Authorization") String token){
 		return userService.findAll(token);
 		
 	}
-	
+	/**
+	 * Update User
+	 * 
+	 * @param user
+	 * @param token
+	 * @return
+	 */
 	@PutMapping("update")
 	public ResponseEntity<Object>updateUsers(@RequestBody User user,
 		@RequestHeader("Authorization") String token){
@@ -136,38 +186,57 @@ public class UserController {
 		
 	}
 	
-	/*
-	 * Mobile Otp Working Fine
-	 *  Otp send 
-	*/
+	
+	
+	/**
+	 *  Mobile Otp send to user Mobile 
+	 *  
+	 * @param otpRequest
+	 * @return
+	 */
 	@PostMapping("mobileotp")
 	public ResponseEntity<Object>mobileOTPSend(@RequestBody PasswordResetRequestDto otpRequest){
 		return userService.otpSend(otpRequest);
 		
 	}
 	
-	/*
+	/**
+	 * 
 	 * Mobile Otp Validation for 5 minutes
 	 * 
-	 * 
-	*/
+	 * @param changePassword
+	 * @return
+	 */
 	@PostMapping("checkMobileOtp")
 	public ResponseEntity<Object> createMobilePasswordOTP(@RequestBody ChangePassword changePassword) {
 		return userService.createMobilePasswordOTP(changePassword);
 	}
 
-	/*
-	 * @Param user  create Restricted Based
-	*/
+	
+	
+	/**
+	 * user  create Restricted Based
+	 * @param token
+	 * @param user
+	 * @return
+	 */
+	
 	@PostMapping("saveuser")
 	public ResponseEntity<Object>createUser(@RequestHeader("Authorization") String token,@RequestBody User user){
 		return userService.createUser(token,user);
 		
 	}
 
-	/*
+
+	
+	/**
 	 * User Login Option enable  and disable
-	*/
+	 * 
+	 * @param token
+	 * @param id
+	 * @param status
+	 * @return
+	 */
 	@GetMapping("statusChange")
 	public ResponseEntity<Object>statusChange(@RequestHeader("Authorization") String token,@RequestParam Long id,@RequestParam boolean status){
 		return userService.statusChange(token,id,status);

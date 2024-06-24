@@ -35,33 +35,42 @@ public class VideoUploadController {
 	@Autowired
 	private VideoUploadService videoUploadService;
 
-	/*
-	 * @Param File  to send Video File
-	 * @ upload only Mp4 Format
+	
+	/**
+	 * Upload Video
 	 * 
-	 *
-	*/
+	 * @param token
+	 * @param videoFile
+	 * @param title
+	 * @param description
+	 * @return
+	 */
 	@PostMapping(value = "upload")
 	public ResponseEntity<Object>uploadVideo(@RequestHeader("Authorization") String token,@RequestParam("file") MultipartFile videoFile, @RequestParam("title") String title,@RequestParam("description") String description){
 		return videoUploadService.uploadVideo(token,videoFile,description,title);
 	}
 	
-	/*
-	 * @Param File  to send Video File in Array
-	 * @ upload only Mp4 Format
-	 * 
-	 *
-	*/
+/**
+ * upload Videos List
+ * 
+ * @param token
+ * @param videoFiles
+ * @param title
+ * @param description
+ * @return
+ */
 	@PostMapping(value = "uploadVideos")
 	public ResponseEntity<Object>uploadVideoLists(@RequestHeader("Authorization") String token,@RequestParam("file") MultipartFile videoFiles[], @RequestParam("title") String title,@RequestParam("description") String description){
 		return videoUploadService.uploadVideoLists(token,videoFiles,description,title);
 	}
 	
-	/*
-	 * @Param  Pathvariable using  directly send id  (url/video/id)
-	 * @ download view Directly
+	/**
+	 * download view Directly (url/video/id)
 	 * 
-	*/
+	 * @param token
+	 * @param id
+	 * @return
+	 */
 	@GetMapping("videos/{id}")
 	
 	public String viewVideo(@RequestHeader("Authorization") String token,@PathVariable("id") Long id){
@@ -76,12 +85,17 @@ public class VideoUploadController {
 //		
 //	}
 	
+
 	
-	/*
-	 * @Param  Pathvariable using  directly send id  (url/video/id)
-	 * @ download video Directly
+	/**
+	 * download video Directly (url/video/id)
 	 * 
-	*/
+	 * @param token
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	
 	 @GetMapping("downloadVideo/{id}")
 	    public ResponseEntity<FileSystemResource> downloadVideo(@RequestHeader("Authorization") String token, @PathVariable Long id,
@@ -92,6 +106,7 @@ public class VideoUploadController {
 	 }
 	 
 	 /**
+	  * get Video List
 	  * 
 	  * @param token
 	  * @return
@@ -103,6 +118,7 @@ public class VideoUploadController {
 	 }
 	 
 	 /**
+	  * delete video
 	  * 
 	  * @param token
 	  * @param id
