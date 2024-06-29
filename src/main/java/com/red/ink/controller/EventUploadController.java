@@ -61,10 +61,10 @@ public class EventUploadController {
 	  * @return
 	  */
 	 @PutMapping("update")
-	 public ResponseEntity<Object>updateEvent(@RequestBody EventUpload eventUpload,@RequestParam("id")Long id,
+	 public ResponseEntity<Object>updateEvent(@RequestBody EventUpload eventUpload,
 			 @RequestHeader("Authorization") String token){
 		 
-				return eventUploadService.eventUpdate(eventUpload,id,token);
+				return eventUploadService.eventUpdate(eventUpload,token);
 		 
 	 }
 	 
@@ -105,9 +105,18 @@ public class EventUploadController {
 	    public ResponseEntity<Object> deleteEventImage(@PathVariable Long eventId,@RequestHeader("Authorization") String token) {
 		  return eventUploadService.removeEventImage(eventId,token);
 	    }
+	 /**
+	  * Event GetUser Based
+	  * @param token
+	  * @param userId
+	  * @return
+	  */
 	 
-	 
-	 
+	 @GetMapping("user/eventGet")
+	 public ResponseEntity<Object>userBasedEventGet(@RequestHeader("Authorization") String token,@RequestParam Long userId){
+		return eventUploadService.getEventsUserBased(token,userId);
+		 
+	 }
 	 
 //		@Value("${file.upload.dir}")
 //		  String FILE_DIRECTORY;

@@ -680,9 +680,19 @@ public class UserServiceImpl implements UserService {
 		try {
 			DecodedJWT jwt = JWT.decode(jwtToken.trim());
 			Optional<User> loggedInUser = userRepository.findByUsername(jwt.getSubject());
-			userRepository.deleteById(id);
+			if(loggedInUser.isPresent()) {
+				Optional<User>user=userRepository.findById(id);
+				if(user.isPresent()) {
+					userRepository.deleteById(user.get().getId());
+					return jsonConstactor.responseCreation(true, "Account Deleted", "Success", null, null);
+				}else {
+					return jsonConstactor.responseCreation(false, "invalid User Id", "Success", null, null);
+				}
+			}
+			
+			return jsonConstactor.responseCreation(false, "loggin user is not present", "Success", null, null);
 
-			return jsonConstactor.responseCreation(true, "Account Deleted", "Success", null, null);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

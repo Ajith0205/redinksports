@@ -7,14 +7,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -76,6 +80,14 @@ public class User {
 
 	@ManyToOne
 	private Role role;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<EventUpload> events;
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<VideoUpload> videos;
 
 	@Transient
 	private Long roleId;
@@ -315,16 +327,33 @@ public class User {
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
+	
+
+	public List<EventUpload> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<EventUpload> events) {
+		this.events = events;
+	}
+
+	public List<VideoUpload> getVideos() {
+		return videos;
+	}
+
+	public void setVideos(List<VideoUpload> videos) {
+		this.videos = videos;
+	}
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", gender=" + gender + ", email=" + email + ", address=" + address
-				+ ", selectRole=" + selectRole + ", selectgame=" + selectgame + ", username=" + username + ", password="
-				+ password + ", status=" + status + ", permissions=" + permissions + ", profile=" + profile
-				+ ", fatherName=" + fatherName + ", dateofbirth=" + dateofbirth + ", placeofBirth=" + placeofBirth
-				+ ", physicalStatus=" + physicalStatus + ", aadharNo=" + aadharNo + ", uploadAadhar=" + uploadAadhar
-				+ ", panNo=" + panNo + ", uploadPAN=" + uploadPAN + ", whatsappNo=" + whatsappNo + ", role=" + role
-				+ ", roleId=" + roleId + "]";
+		return "User [id=" + id + ", profile=" + profile + ", name=" + name + ", fatherName=" + fatherName + ", gender="
+				+ gender + ", email=" + email + ", dateofbirth=" + dateofbirth + ", placeofBirth=" + placeofBirth
+				+ ", physicalStatus=" + physicalStatus + ", address=" + address + ", aadharNo=" + aadharNo
+				+ ", uploadAadhar=" + uploadAadhar + ", panNo=" + panNo + ", uploadPAN=" + uploadPAN + ", whatsappNo="
+				+ whatsappNo + ", selectRole=" + selectRole + ", selectgame=" + selectgame + ", username=" + username
+				+ ", password=" + password + ", status=" + status + ", permissions=" + permissions + ", role=" + role
+				+ ", events=" + events + ", videos=" + videos + ", roleId=" + roleId + "]";
 	}
 
 	

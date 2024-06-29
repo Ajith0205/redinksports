@@ -116,6 +116,18 @@ public class VideoUploadController {
 		return videoUploadService.getAllVideoFileNames(token);
 		 
 	 }
+	 /**
+	  * user Based Video get
+	  * @param token
+	  * @param userId
+	  * @return
+	  */
+	 @GetMapping("userBasedVideos")
+	 public ResponseEntity<Object> getUserBasedVideos(@RequestHeader("Authorization") String token,@RequestParam Long userId) {
+		return videoUploadService.getUserBasedVideos(token,userId);
+		 
+	 }
+	 
 	 
 	 /**
 	  * delete video

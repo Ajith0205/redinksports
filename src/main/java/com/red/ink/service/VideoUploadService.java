@@ -37,4 +37,6 @@ public interface VideoUploadService {
 
 	ResponseEntity<Object> deleteByVideo(String token, Long id);
 
+	ResponseEntity<Object> getUserBasedVideos(String token, Long userId);
+
 }
