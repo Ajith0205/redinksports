@@ -679,7 +679,7 @@ public class EventUploadServiceImpl implements EventUploadService {
 			if(loggedInUser.isPresent()) {
 				List<EventUpload>list=new ArrayList<>();
 				Optional<User>user=userRepository.findById(userId);
-				if(loggedInUser.get().getRole().getRole().equals(user.get().getRole().getRole())) {
+				if(loggedInUser.get().getRole().getRole().equals("ADMIN") && user.get().getRole().getRole().equals("ADMIN")) {
 					List<EventUpload>eventUploads=eventUploadRepository.findAll();
 					list=eventUploads.stream()
 				              .peek(event -> {

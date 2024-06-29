@@ -500,7 +500,7 @@ public class VideoUploadServiceImpl implements VideoUploadService {
 		if(loggedInUser.isPresent()) {
 			Optional<User>user=userRepository.findById(userId);
 			List<VideoUpload>list=new ArrayList<>();
-			if(loggedInUser.get().getRole().getRole().equals(user.get().getRole().getRole())) {
+			if(loggedInUser.get().getRole().getRole().equals("ADMIN") && user.get().getRole().getRole().equals("ADMIN")) {
 				List<VideoUpload>videoUploads=videoUploadRepository.findAll();
 				list=videoUploads.stream()
 				        .peek(videoUpload -> {
