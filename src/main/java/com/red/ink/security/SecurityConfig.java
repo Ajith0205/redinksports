@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 				.addFilter(jwtAuthenticationFilter2)
 				.addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository)).authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/user/forgotpassword","/user/forgotpasswordOTP","/user/checkOtp","/user/mobileotp","/user/checkMobileOtp").permitAll().antMatchers(HttpMethod.POST, "/user/").permitAll()
-				.antMatchers(HttpMethod.GET, "/getBulkUploadTemplate").permitAll()
+				.antMatchers(HttpMethod.GET, "/getBulkUploadTemplate","/user/welcome").permitAll()
 				//.antMatchers("/swagger-ui.html").permitAll()
 				.antMatchers("/v2/api-docs","/home").permitAll()
 				.antMatchers(HttpMethod.POST, "/user/login","/user/save").permitAll().antMatchers(HttpMethod.POST, "/user/").permitAll()
