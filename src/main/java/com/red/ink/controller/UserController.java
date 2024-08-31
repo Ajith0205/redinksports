@@ -44,6 +44,22 @@ public class UserController {
 	@Autowired
 	private RoleService roleService;
 
+	/**
+	 * welcome Api
+	 * 
+	 * @return
+	 */
+	@GetMapping("welcome")
+	public String welcomeService() {
+		return "Welcome Redink";
+	}
+
+	/**
+	 * User save
+	 * 
+	 * @param user
+	 * @return
+	 */
 	@PostMapping("save")
 	public ResponseEntity<Object> saveUser(@RequestBody User user) {
 
@@ -54,29 +70,24 @@ public class UserController {
 	@PostMapping("login")
 	public void validateUser(@RequestBody LoginDto user) {
 	}
-	
-	
+
 	/**
-	 * Forgot Password  send Otp For Mail
+	 * Forgot Password send Otp For Mail
 	 * 
 	 * Inputs email,username
 	 * 
 	 * @param forgotPassword
 	 * @return
 	 */
-	
+
 	@PostMapping("forgotpasswordOTP")
 	public ResponseEntity<Object> forgotPasswordOTP(@RequestBody ForgotPassword forgotPassword) {
 		return userService.forgotPasswordByUserGetOTP(forgotPassword);
 	}
-	
-	
 
-
-	
 	/**
-	 * Password Change
-	 * Inputs Old Password,New Password ,Conform Password
+	 * Password Change Inputs Old Password,New Password ,Conform Password
+	 * 
 	 * @param changePassword
 	 * @param token
 	 * @return
@@ -87,9 +98,9 @@ public class UserController {
 		return userService.changePasswordByUser(changePassword, token);
 	}
 
-	
 	/**
 	 * Email Otp Validation for 5 minutes
+	 * 
 	 * @param changePassword
 	 * @return
 	 */
@@ -97,11 +108,9 @@ public class UserController {
 	public ResponseEntity<Object> createPasswordOTP(@RequestBody ChangePassword changePassword) {
 		return userService.otpCreatePassword(changePassword);
 	}
-	
-	
-	
+
 	/**
-	 *  password Send to Email 
+	 * password Send to Email
 	 * 
 	 * @param forgetPassword
 	 * @return
@@ -111,7 +120,7 @@ public class UserController {
 		return userService.forgotPasswordByUser(forgetPassword);
 
 	}
-	
+
 	/**
 	 * get User Details
 	 * 
@@ -123,10 +132,10 @@ public class UserController {
 	@GetMapping("userDetails")
 	public ResponseEntity<Object> findUserById(@RequestParam("id") Long id,
 			@RequestHeader("Authorization") String token) {
-		return userService.findUserById(id,token);
+		return userService.findUserById(id, token);
 
 	}
-	
+
 	/**
 	 * delete User
 	 * 
@@ -138,20 +147,17 @@ public class UserController {
 	@DeleteMapping("deleteUser")
 	public ResponseEntity<Object> deleteUserById(@RequestParam("id") Long id,
 			@RequestHeader("Authorization") String token) {
-		return userService.deleteUserById(id,token);
+		return userService.deleteUserById(id, token);
 	}
-
-	
 
 	/**
 	 * 
-	 * save Multiple  user
+	 * save Multiple user
 	 * 
 	 * @param file
 	 * @param token
 	 * @return
 	 */
-	
 
 	@PostMapping("saveMultipleUsers")
 	public ResponseEntity<Object> multipleUsersSave(@RequestParam(value = "files") MultipartFile[] file,
@@ -159,19 +165,20 @@ public class UserController {
 		return userService.save(file, token);
 
 	}
-	
+
 	/**
 	 * Get All Users
 	 * 
 	 * @param token
 	 * @return
 	 */
-	
+
 	@GetMapping("getAllUsers")
-	public ResponseEntity<Object> getAlluser(@RequestHeader("Authorization") String token){
+	public ResponseEntity<Object> getAlluser(@RequestHeader("Authorization") String token) {
 		return userService.findAll(token);
-		
+
 	}
+
 	/**
 	 * Update User
 	 * 
@@ -180,26 +187,23 @@ public class UserController {
 	 * @return
 	 */
 	@PutMapping("update")
-	public ResponseEntity<Object>updateUsers(@RequestBody User user,
-		@RequestHeader("Authorization") String token){
-				return userService.updateUser(user,token);
-		
+	public ResponseEntity<Object> updateUsers(@RequestBody User user, @RequestHeader("Authorization") String token) {
+		return userService.updateUser(user, token);
+
 	}
-	
-	
-	
+
 	/**
-	 *  Mobile Otp send to user Mobile 
-	 *  
+	 * Mobile Otp send to user Mobile
+	 * 
 	 * @param otpRequest
 	 * @return
 	 */
 	@PostMapping("mobileotp")
-	public ResponseEntity<Object>mobileOTPSend(@RequestBody PasswordResetRequestDto otpRequest){
+	public ResponseEntity<Object> mobileOTPSend(@RequestBody PasswordResetRequestDto otpRequest) {
 		return userService.otpSend(otpRequest);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * Mobile Otp Validation for 5 minutes
@@ -212,25 +216,22 @@ public class UserController {
 		return userService.createMobilePasswordOTP(changePassword);
 	}
 
-	
-	
 	/**
-	 * user  create Restricted Based
+	 * user create Restricted Based
+	 * 
 	 * @param token
 	 * @param user
 	 * @return
 	 */
-	
+
 	@PostMapping("saveuser")
-	public ResponseEntity<Object>createUser(@RequestHeader("Authorization") String token,@RequestBody User user){
-		return userService.createUser(token,user);
-		
+	public ResponseEntity<Object> createUser(@RequestHeader("Authorization") String token, @RequestBody User user) {
+		return userService.createUser(token, user);
+
 	}
 
-
-	
 	/**
-	 * User Login Option enable  and disable
+	 * User Login Option enable and disable
 	 * 
 	 * @param token
 	 * @param id
@@ -238,10 +239,10 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping("statusChange")
-	public ResponseEntity<Object>statusChange(@RequestHeader("Authorization") String token,@RequestParam Long id,@RequestParam boolean status){
-		return userService.statusChange(token,id,status);
-		
+	public ResponseEntity<Object> statusChange(@RequestHeader("Authorization") String token, @RequestParam Long id,
+			@RequestParam boolean status) {
+		return userService.statusChange(token, id, status);
+
 	}
 
-	
 }
